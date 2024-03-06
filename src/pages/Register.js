@@ -31,6 +31,7 @@ function Register() {
         `user/${kinveyAppKey}`,
         userData
       );
+
       sessionStorage.setItem("userData", JSON.stringify(response));
 
       navigate("/dashboard");

@@ -1,28 +1,30 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import httpRequest from "../httpRequest";
 
 function Dashboard() {
-  //   const handleLogin = async (event) => {
-  //     event.preventDefault();
-  //     const kinveyAppKey = "kid_r1LtOgra6";
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
 
-  //     if (userData) {
-  //       try {
-  //         const response = await httpRequest(
-  //           "POST",
-  //           `user/${kinveyAppKey}/login`,
-  //           userData
-  //         );
+  const fetchBooks = async () => {
+    const kinveyAppKey = "kid_r1LtOgra6";
 
-  //         sessionStorage.setItem("userData", JSON.stringify(response));
+    try {
+      const response = await httpRequest(
+        "GET",
+        `appdata/${kinveyAppKey}/books`,
+        null,
+        { _acl: userData._acl }
+      );
 
-  //         navigate("/dashboard");
-  //       } catch (error) {
-  //         console.error("Login failed:", error.response);
-  //       }
-  //     }
-  //   };
+      console.log(response);
+    } catch (error) {
+      console.error(error.response);
+    }
+  };
+
+  useEffect(() => {
+    fetchBooks();
+  }, [fetchBooks]);
 
   return (
     <section className="w-full min-h-screen flex items-center justify-center">
