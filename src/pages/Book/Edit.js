@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import httpRequest from "../../httpRequest";
 import Form from "../../components/CreateEditForm";
 
 function Create() {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [bookData, setBookData] = useState({
     title: "",
     author: "",
@@ -14,7 +15,7 @@ function Create() {
   });
   const [error, setError] = useState("");
 
-  const createBook = async (event) => {
+  const editBook = async (event) => {
     event.preventDefault();
     const kinveyAppKey = "kid_r1LtOgra6";
     const userData = JSON.parse(sessionStorage.getItem("userData"));
@@ -30,8 +31,8 @@ function Create() {
 
       try {
         const response = await httpRequest(
-          "POST",
-          `appdata/${kinveyAppKey}/books`,
+          "PUT",
+          `appdata/${kinveyAppKey}/books/${id}`,
           data,
           userData._kmd.authtoken
         );
@@ -45,12 +46,36 @@ function Create() {
     }
   };
 
+  useEffect(() => {
+    if (id) {
+      const fetchBookData = async () => {
+        const kinveyAppKey = "kid_r1LtOgra6";
+        const userData = JSON.parse(sessionStorage.getItem("userData"));
+
+        try {
+          const response = await httpRequest(
+            "GET",
+            `appdata/${kinveyAppKey}/books/${id}`,
+            null,
+            userData._kmd.authtoken
+          );
+
+          setBookData(response);
+        } catch (error) {
+          console.error("error:", error.response);
+        }
+      };
+
+      fetchBookData();
+    }
+  }, [id]);
+
   return (
     <Form
-      title="Add a new book"
+      title="Edit book"
       data={bookData}
       error={error}
-      submit={(event) => createBook(event)}
+      submit={(event) => editBook(event)}
       setData={setBookData}
     />
   );
