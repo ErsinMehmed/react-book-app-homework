@@ -5,15 +5,17 @@ const kinveyAppKey = "kid_r1LtOgra6";
 const kinveyAppSecret = "684328ab21ed479384907e70b6bfb81e";
 
 const httpRequest = async (method, endpoint, data = null, authToken = "") => {
-  let headers = {
-    "Content-Type": "application/json",
-  };
+  let headers = {};
 
   if (authToken) {
     headers.Authorization = "Kinvey " + authToken;
   } else {
     headers.Authorization =
       "Basic " + btoa(kinveyAppKey + ":" + kinveyAppSecret);
+  }
+
+  if (method.toUpperCase() !== "DELETE") {
+    headers["Content-Type"] = "application/json";
   }
 
   try {

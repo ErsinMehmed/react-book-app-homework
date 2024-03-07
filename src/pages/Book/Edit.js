@@ -37,7 +37,7 @@ function Create() {
           userData._kmd.authtoken
         );
 
-        if (response) navigate("/dashboard");
+        if (response) navigate("/dashboard?bookEdited=true");
       } catch (error) {
         console.error("error:", error.response);
       }
@@ -72,11 +72,12 @@ function Create() {
 
   return (
     <Form
-      title="Edit book"
+      title='Edit book'
       data={bookData}
       error={error}
       submit={(event) => editBook(event)}
       setData={setBookData}
+      buttonText='Edit'
     />
   );
 }

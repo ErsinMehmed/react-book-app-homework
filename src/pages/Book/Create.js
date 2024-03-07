@@ -36,7 +36,7 @@ function Create() {
           userData._kmd.authtoken
         );
 
-        if (response) navigate("/dashboard");
+        if (response) navigate("/dashboard?bookAdded=true");
       } catch (error) {
         console.error("error:", error.response);
       }
@@ -47,11 +47,12 @@ function Create() {
 
   return (
     <Form
-      title="Add a new book"
+      title='Add a new book'
       data={bookData}
       error={error}
       submit={(event) => createBook(event)}
       setData={setBookData}
+      buttonText='Add'
     />
   );
 }
